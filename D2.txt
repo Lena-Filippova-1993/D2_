@@ -1,0 +1,71 @@
+from D2App.models import *
+User1 = User.objects.create_user(username = 'Lena')
+User2 = User.objects.create_user(username = 'Dima')
+
+Author1 = Author.objects.create(authorUser=User1)
+Author2 = Author.objects.create(authorUser=User2)
+
+Category.objects.create(name='Python')
+Category.objects.create(name='Django')
+Category.objects.create(name='Progs')
+Category.objects.create(name='Code')
+
+Post.objects.create(author=Author1, categoryType='AR', title='Заголовок статьи 1', text='Текст статьи 1')
+Post.objects.create(author=Author1, categoryType='AR', title='Заголовок статьи 2', text='Текст статьи 2')
+Post.objects.create(author=Author1, categoryType='NV', title='Заголовок новости 1', text='Текст новости 1')
+Post.objects.create(author=Author2, categoryType='NV', title='Заголовок новости 1', text='Текст новости 1')
+
+Post.objects.get(id=1).postCategory.add(Category.objects.get(id=1))
+Post.objects.get(id=1).postCategory.add(Category.objects.get(id=3))
+Post.objects.get(id=3).postCategory.add(Category.objects.get(id=4))
+Post.objects.get(id=4).postCategory.add(Category.objects.get(id=2))
+
+
+Comment.objects.create(commentPost=Post.objects.get(id=1), commentUser=Author.objects.get(id=1).authorUser, text ='Текст комментария 1')
+Comment.objects.create(commentPost=Post.objects.get(id=2), commentUser=Author.objects.get(id=1).authorUser, text ='Текст комментария 2')
+Comment.objects.create(commentPost=Post.objects.get(id=3), commentUser=Author.objects.get(id=1).authorUser, text ='Текст комментария 3')
+Comment.objects.create(commentPost=Post.objects.get(id=2), commentUser=Author.objects.get(id=1).authorUser, text ='Текст комментария 4')
+Comment.objects.create(commentPost=Post.objects.get(id=2), commentUser=Author.objects.get(id=2).authorUser, text ='Текст комментария 5')
+
+Comment.objects.get(id=1).like()
+Comment.objects.get(id=1).like()
+Comment.objects.get(id=1).like()
+Comment.objects.get(id=1).like()
+Comment.objects.get(id=2).like()
+Comment.objects.get(id=3).like()
+Comment.objects.get(id=4).like()
+Comment.objects.get(id=2).dislike()
+Comment.objects.get(id=2).dislike()
+Comment.objects.get(id=2).dislike()
+Comment.objects.get(id=5).like()
+
+Post.objects.get(id=1).like()
+Post.objects.get(id=2).like()
+Post.objects.get(id=3).like()
+Post.objects.get(id=4).like()
+Post.objects.get(id=2).dislike()
+Post.objects.get(id=2).like()
+Post.objects.get(id=2).dislike()
+
+
+Author.objects.get(id=1).update_rating()
+Author.objects.get(id=2).update_rating()
+
+Author.objects.get(id=1).rating
+Author.objects.get(id=2).rating
+
+Author.objects.order_by('-ratingAuthor')[:1][0].ratingAuthor
+Author.objects.order_by('-ratingAuthor')[:1][0].authorUser.username 
+
+Post.objects.order_by('-rating').values('dateCreation')[0]
+Post.objects.order_by('-rating')[:1][0].author.authorUser
+Post.objects.order_by('-rating').values('rating', 'title')[0]
+Post.objects.order_by('-rating')[:1][0].preview()
+
+Comment.objects.order_by('-rating').values('dateCreate', 'commentUser', 'rating', 'text')[0]
+
+
+
+
+
+
